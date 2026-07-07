@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 
 # Create your views here.
 from .models import Instrument
@@ -12,10 +13,22 @@ def instrument_list(request):
     })
 
 def instrument_detail(request, pk):
-    instrument = get_object_or_404(Instrument, pk=pk)
-    return render(request, "instruments/detail.html", {
-        "instrument": instrument
-    })
+
+    instrument = get_object_or_404(
+        Instrument,
+        pk=pk
+    )
+
+    measurements = instrument.measurements.all()[:10]
+
+    return render(
+        request,
+        "instruments/detail.html",
+        {
+            "instrument": instrument,
+            "measurements": measurements
+        }
+    )
 
 def instrument_create(request):
     if request.method == "POST":
@@ -56,3 +69,58 @@ def instrument_delete(request, pk):
     return render(request, "instruments/delete.html", {
         "instrument": instrument
     })
+
+def instrument_connect(request, pk):
+
+    instrument = get_object_or_404(
+        Instrument,
+        pk=pk
+    )
+
+    messages.info(
+        request,
+        f"Connecting to {instrument.name}..."
+    )
+
+    return redirect(
+        "instrument_detail",
+        pk=instrument.pk
+    )
+
+
+
+def instrument_identify(request, pk):
+
+    instrument = get_object_or_404(
+        Instrument,
+        pk=pk
+    )
+
+    messages.info(
+        request,
+        f"ID query sent to {instrument.name}"
+    )
+
+    return redirect(
+        "instrument_detail",
+        pk=instrument.pk
+    )
+
+
+
+def instrument_measure(request, pk):
+
+    instrument = get_object_or_404(
+        Instrument,
+        pk=pk
+    )
+
+    messages.info(
+        request,
+        f"Starting measurement on {instrument.name}"
+    )
+
+    return redirect(
+        "instrument_detail",
+        pk=instrument.pk
+    )

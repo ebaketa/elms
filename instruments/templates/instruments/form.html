@@ -2,7 +2,11 @@
 
 {% block content %}
 
-<h2>Instrument Form</h2>
+<h2 class="mb-4">Instrument Form</h2>
+
+<a class="btn btn-primary mb-3" href="{% url 'instrument_list' %}" class="btn btn-outline-secondary">
+    ← Back to Instruments
+</a>
 
 <form method="post">
     {% csrf_token %}

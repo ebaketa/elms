@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+Measurements
+{% endblock %}
+
+
+{% block content %}
+
+<h2 class="mb-4">
+    Measurements
+</h2>
+
+
+<table class="table table-striped">
+
+<thead>
+<tr>
+    <th>Instrument</th>
+    <th>Time</th>
+    <th>Function</th>
+    <th>Value</th>
+    <th>Unit</th>
+</tr>
+</thead>
+
+
+<tbody>
+
+{% for m in measurements %}
+
+<tr>
+
+<td>
+    {{ m.instrument.name }}
+</td>
+
+<td>
+    {{ m.timestamp }}
+</td>
+
+<td>
+    {{ m.function }}
+</td>
+
+<td>
+    {{ m.value }}
+</td>
+
+<td>
+    {{ m.unit }}
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="5" class="text-center text-muted">
+No measurements
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+
+{% endblock %}

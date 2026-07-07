@@ -1,31 +1,233 @@
 {% extends "base.html" %}
 
+{% block title %}
+{{ instrument.name }}
+{% endblock %}
+
 {% block content %}
 
-<h2>{{ instrument.name }}</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
 
-<div class="card mt-3">
-    <div class="card-body">
+    <div>
+        <h2>{{ instrument.name }}</h2>
 
-        <p><b>Manufacturer:</b> {{ instrument.manufacturer }}</p>
-        <p><b>Model:</b> {{ instrument.model }}</p>
-        <p><b>Serial:</b> {{ instrument.serial_number }}</p>
-        <p><b>Category:</b> {{ instrument.category }}</p>
-        <p><b>Interface:</b> {{ instrument.interface }}</p>
-        <p><b>Address:</b> {{ instrument.address }}</p>
-        <p><b>Status:</b> {{ instrument.status }}</p>
+        {% if instrument.status == "active" %}
+            <span class="badge bg-success">
+                {{ instrument.get_status_display }}
+            </span>
+        {% elif instrument.status == "inactive" %}
+            <span class="badge bg-secondary">
+                {{ instrument.get_status_display }}
+            </span>
+        {% else %}
+            <span class="badge bg-warning text-dark">
+                {{ instrument.get_status_display }}
+            </span>
+        {% endif %}
+    </div>
 
-        <p class="mt-3">{{ instrument.description }}</p>
 
-        <a href="{% url 'instrument_edit' instrument.id %}" class="btn btn-warning">
-            Edit
+    <div>
+        <a href="{% url 'instrument_list' %}" 
+           class="btn btn-outline-secondary">
+            ← Back to Instruments
         </a>
+    </div>
 
-        <a href="{% url 'instrument_delete' instrument.id %}" class="btn btn-danger">
-            Delete
-        </a>
+</div>
+
+
+<!-- Actions -->
+
+<div class="mb-4">
+
+    <a href="{% url 'instrument_edit' instrument.id %}"
+       class="btn btn-primary">
+        Edit
+    </a>
+
+
+    <a href="{% url 'instrument_connect' instrument.id %}" class="btn btn-success">
+        Connect
+    </a>
+
+
+    <a href="{% url 'instrument_identify' instrument.id %}" class="btn btn-info">
+        Identify
+    </a>
+
+
+    <a href="{% url 'instrument_measure' instrument.id %}" class="btn btn-warning">
+        Measure
+    </a>
+
+
+    <a href="{% url 'instrument_delete' instrument.id %}"
+       class="btn btn-danger">
+        Delete
+    </a>
+
+</div>
+
+
+
+<div class="row">
+
+
+    <!-- General Information -->
+
+    <div class="col-md-6">
+
+        <div class="card mb-3">
+
+            <div class="card-header">
+                General Information
+            </div>
+
+
+            <div class="card-body">
+
+                <p>
+                    <strong>Name:</strong>
+                    {{ instrument.name }}
+                </p>
+
+
+                <p>
+                    <strong>Category:</strong>
+                    {{ instrument.get_category_display }}
+                </p>
+
+
+                <p>
+                    <strong>Manufacturer:</strong>
+                    {{ instrument.manufacturer }}
+                </p>
+
+
+                <p>
+                    <strong>Model:</strong>
+                    {{ instrument.model }}
+                </p>
+
+
+            </div>
+
+        </div>
 
     </div>
+
+
+
+    <!-- Connection -->
+
+    <div class="col-md-6">
+
+        <div class="card mb-3">
+
+            <div class="card-header">
+                Connection
+            </div>
+
+
+            <div class="card-body">
+
+
+                <p>
+                    <strong>Interface:</strong>
+                    {{ instrument.get_interface_display }}
+                </p>
+
+
+                <p>
+                    <strong>Address:</strong>
+                    {{ instrument.address }}
+                </p>
+
+
+                <p>
+                    <strong>Serial Number:</strong>
+                    {{ instrument.serial_number }}
+                </p>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<!-- Latest Measurements -->
+
+<div class="card mt-3">
+
+    <div class="card-header">
+        Latest Measurements
+    </div>
+
+
+    <div class="card-body">
+
+
+        <table class="table table-sm table-striped">
+
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Function</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+
+
+            <tbody>
+
+            {% for m in measurements %}
+
+                <tr>
+
+                    <td>
+                        {{ m.timestamp }}
+                    </td>
+
+
+                    <td>
+                        {{ m.function }}
+                    </td>
+
+
+                    <td>
+                        {{ m.value }}
+                        {{ m.unit }}
+                    </td>
+
+                </tr>
+
+
+            {% empty %}
+
+                <tr>
+                    <td colspan="3"
+                        class="text-center text-muted">
+
+                        No measurements found
+
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
 </div>
 
 {% endblock %}
