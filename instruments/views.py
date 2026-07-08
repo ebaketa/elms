@@ -2,10 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 
 # Create your views here.
-from .models import Instrument
+from .models import Instrument, InstrumentStatus
 from .forms import InstrumentForm
 from drivers.manager import DriverManager
 from measurements.models import Measurement
+from django.utils import timezone
 
 def instrument_list(request):
     instruments = Instrument.objects.all()
@@ -84,12 +85,19 @@ def instrument_connect(request, pk):
     try:
         driver.connect()
 
+        instrument.status = InstrumentStatus.ONLINE
+        instrument.last_connected = timezone.now()
+        instrument.save()
+
         messages.success(
             request,
             f"{instrument.name} connected"
         )
 
     except Exception as e:
+
+        instrument.status = InstrumentStatus.ERROR
+        instrument.save()
 
         messages.error(
             request,
@@ -112,11 +120,16 @@ def instrument_identify(request, pk):
 
     try:
 
-        identity = driver.identify()
+        driver.connect()
+
+        identification = driver.identify()
+
+        instrument.last_identification = identification
+        instrument.save()
 
         messages.info(
             request,
-            identity
+            identification
         )
 
     except Exception as e:

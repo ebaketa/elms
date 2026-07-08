@@ -11,18 +11,26 @@
     <div>
         <h2>{{ instrument.name }}</h2>
 
-        {% if instrument.status == "active" %}
+        {% if instrument.status == "online" %}
             <span class="badge bg-success">
                 {{ instrument.get_status_display }}
             </span>
-        {% elif instrument.status == "inactive" %}
+
+        {% elif instrument.status == "offline" %}
             <span class="badge bg-secondary">
                 {{ instrument.get_status_display }}
             </span>
-        {% else %}
+
+        {% elif instrument.status == "busy" %}
             <span class="badge bg-warning text-dark">
                 {{ instrument.get_status_display }}
             </span>
+
+        {% else %}
+            <span class="badge bg-danger">
+                {{ instrument.get_status_display }}
+            </span>
+
         {% endif %}
     </div>
 
@@ -150,6 +158,10 @@
                     {{ instrument.serial_number }}
                 </p>
 
+                <p>
+                    <strong>Identification:</strong>
+                    {{ instrument.last_identification }}
+                </p>
 
             </div>
 
