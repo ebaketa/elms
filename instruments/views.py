@@ -79,17 +79,27 @@ def instrument_connect(request, pk):
         pk=pk
     )
 
-    messages.info(
-        request,
-        f"Connecting to {instrument.name}..."
-    )
+    driver = DriverManager.get_driver(instrument)
+
+    try:
+        driver.connect()
+
+        messages.success(
+            request,
+            f"{instrument.name} connected"
+        )
+
+    except Exception as e:
+
+        messages.error(
+            request,
+            f"Connection failed: {e}"
+        )
 
     return redirect(
         "instrument_detail",
         pk=instrument.pk
     )
-
-
 
 def instrument_identify(request, pk):
 
@@ -98,10 +108,23 @@ def instrument_identify(request, pk):
         pk=pk
     )
 
-    messages.info(
-        request,
-        f"ID query sent to {instrument.name}"
-    )
+    driver = DriverManager.get_driver(instrument)
+
+    try:
+
+        identity = driver.identify()
+
+        messages.info(
+            request,
+            identity
+        )
+
+    except Exception as e:
+
+        messages.error(
+            request,
+            f"Identify failed: {e}"
+        )
 
     return redirect(
         "instrument_detail",

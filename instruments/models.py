@@ -35,6 +35,15 @@ class Instrument(models.Model):
 
     model = models.CharField(max_length=100)
 
+    last_connected = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    last_identification = models.TextField(
+        blank=True
+    )
+
     serial_number = models.CharField(
         max_length=100,
         blank=True,
