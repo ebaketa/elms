@@ -4,6 +4,8 @@ from django.contrib import messages
 # Create your views here.
 from .models import Instrument
 from .forms import InstrumentForm
+from drivers.manager import DriverManager
+from measurements.models import Measurement
 
 def instrument_list(request):
     instruments = Instrument.objects.all()
@@ -106,8 +108,6 @@ def instrument_identify(request, pk):
         pk=instrument.pk
     )
 
-
-
 def instrument_measure(request, pk):
 
     instrument = get_object_or_404(
@@ -115,10 +115,31 @@ def instrument_measure(request, pk):
         pk=pk
     )
 
-    messages.info(
-        request,
-        f"Starting measurement on {instrument.name}"
-    )
+    driver = DriverManager.get_driver(instrument)
+
+    try:
+        driver.connect()
+
+        result = driver.measure()
+
+        Measurement.objects.create(
+            instrument=instrument,
+            function=result["function"],
+            value=result["value"],
+            unit=result["unit"],
+        )
+
+        messages.success(
+            request,
+            f'Measurement: {result["value"]} {result["unit"]}'
+        )
+
+    except Exception as e:
+
+        messages.error(
+            request,
+            f"Measurement failed: {e}"
+        )
 
     return redirect(
         "instrument_detail",
