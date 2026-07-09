@@ -6,82 +6,190 @@ Instruments
 
 {% block content %}
 
-<h2 class="mb-4">Instruments</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<a class="btn btn-primary mb-3" href="{% url 'instrument_create' %}">
-    + Add Instrument
-</a>
+    <div>
+        <h2 class="mb-0">
+            Instruments ({{ instrument_count }})
+        </h2>
 
-<table class="table table-striped table-hover align-middle">
+        <small class="text-muted">
+            Manage laboratory instruments
+        </small>
+    </div>
 
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Manufacturer</th>
-            <th>Model</th>
-            <th>Category</th>
-            <th>Interface</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+    <a href="{% url 'instrument_create' %}" class="btn btn-success">
+        + Add Instrument
+    </a>
 
-    <tbody>
+</div>
 
-    {% for i in instruments %}
+<div class="card shadow-sm">
 
-        <tr>
-            <td>
-                <a href="{% url 'instrument_detail' i.id %}">
-                    {{ i.name }}
-                </a>
-            </td>
-            <td>{{ i.manufacturer }}</td>
-            <td>{{ i.model }}</td>
-            <td>{{ i.category }}</td>
-            <td>{{ i.interface }}</td>
+    <div class="card-body">
 
-            <td>
-                {% if i.status == "online" %}
-                    <span class="badge bg-success">Online</span>
-                {% elif i.status == "offline" %}
-                    <span class="badge bg-secondary">Offline</span>
-                {% elif i.status == "busy" %}
-                    <span class="badge bg-warning text-dark">Busy</span>
-                {% else %}
-                    <span class="badge bg-danger">Error</span>
-                {% endif %}
-            </td>
-            <td>
-                <a href="{% url 'instrument_detail' i.id %}" 
-                class="btn btn-sm btn-primary">
-                    View
-                </a>
+        <!-- Search (UI only for now) -->
 
-                <a href="{% url 'instrument_edit' i.id %}" 
-                class="btn btn-sm btn-warning">
-                    Edit
-                </a>
+        <div class="mb-3">
 
-                <a href="{% url 'instrument_delete' i.id %}" 
-                class="btn btn-sm btn-danger">
-                    Delete
-                </a>
-            </td>
-        </tr>
+            <form method="get" class="row g-2 mb-3">
 
-    {% empty %}
+                <div class="col-md-6">
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Search..."
+                        value="{{ search }}">
+                </div>
 
-        <tr>
-            <td colspan="7" class="text-center text-muted">
-                No instruments found
-            </td>
-        </tr>
+                <div class="col-md-3">
+
+                    <select name="category" class="form-select">
+
+                        <option value="">All Categories</option>
+
+                        {% for value, label in categories %}
+
+                            <option value="{{ value }}"
+                                {% if category == value %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ label }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-3 d-grid gap-2 d-md-flex">
+
+                    <button class="btn btn-primary">
+                        Search
+                    </button>
+
+                    <a href="{% url 'instrument_list' %}"
+                    class="btn btn-outline-secondary">
+                        Clear
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <table class="table table-hover align-middle">
+
+            <thead>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Manufacturer</th>
+                    <th>Model</th>
+                    <th>Category</th>
+                    <th>Interface</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for i in instruments %}
+
+                <tr>
+
+                    <td>
+
+                        <a href="{% url 'instrument_detail' i.id %}"
+                           class="text-decoration-none fw-semibold">
+
+                            {{ i.name }}
+
+                        </a>
+
+                    </td>
+
+                    <td>{{ i.manufacturer }}</td>
+
+                    <td>{{ i.model }}</td>
+
+                    <td>{{ i.get_category_display }}</td>
+
+                    <td>{{ i.get_interface_display }}</td>
+
+                    <td>
+
+                        <span class="badge bg-{{ i.status_badge }}">
+                            {{ i.get_status_display }}
+                        </span>
+
+                    </td>
+
+                    <td class="text-end">
+
+                        <a href="{% url 'instrument_detail' i.id %}"
+                           class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
+
+                        <a href="{% url 'instrument_edit' i.id %}"
+                           class="btn btn-sm btn-outline-warning">
+                            Edit
+                        </a>
+
+                        <a href="{% url 'instrument_delete' i.id %}"
+                           class="btn btn-sm btn-outline-danger">
+                            Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="7"
+                        class="text-center text-muted">
+
+                        No instruments found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<select name="status" class="form-select">
+
+    <option value="">All Status</option>
+
+    {% for value, label in statuses %}
+
+        <option value="{{ value }}"
+            {% if status == value %}
+                selected
+            {% endif %}>
+            {{ label }}
+        </option>
 
     {% endfor %}
 
-    </tbody>
-
-</table>
+</select>
 
 {% endblock %}

@@ -90,13 +90,21 @@ class Instrument(models.Model):
         auto_now=True,
     )
 
-    class Meta:
-        ordering = ["manufacturer", "model"]
+class Meta:
+    ordering = ["manufacturer", "model"]
+    verbose_name = "Instrument"
+    verbose_name_plural = "Instruments"
 
-    def __str__(self):
-        return f"{self.manufacturer} {self.model}"
 
-    class Meta:
-        ordering = ["manufacturer", "model"]
-        verbose_name = "Instrument"
-        verbose_name_plural = "Instruments"
+def __str__(self):
+    return f"{self.manufacturer} {self.model}"
+
+
+@property
+def status_badge(self):
+    return {
+        "online": "success",
+        "offline": "secondary",
+        "busy": "warning",
+        "error": "danger",
+    }.get(self.status, "secondary")

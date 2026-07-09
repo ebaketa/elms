@@ -6,237 +6,204 @@
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-3">
+<!-- Back button -->
+<div class="mb-3">
+    <a href="{% url 'instrument_list' %}" class="btn btn-outline-secondary">
+        ← Back to Instruments
+    </a>
+</div>
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
 
     <div>
-        <h2>{{ instrument.name }}</h2>
+        <h2 class="mb-1">{{ instrument.name }}</h2>
+        <p class="text-muted mb-0">
+            {{ instrument.manufacturer }} {{ instrument.model }}
+        </p>
+    </div>
+
+    <div>
 
         {% if instrument.status == "online" %}
-            <span class="badge bg-success">
+            <span class="badge bg-success fs-6">
                 {{ instrument.get_status_display }}
             </span>
 
         {% elif instrument.status == "offline" %}
-            <span class="badge bg-secondary">
+            <span class="badge bg-secondary fs-6">
                 {{ instrument.get_status_display }}
             </span>
 
         {% elif instrument.status == "busy" %}
-            <span class="badge bg-warning text-dark">
+            <span class="badge bg-warning text-dark fs-6">
                 {{ instrument.get_status_display }}
             </span>
 
         {% else %}
-            <span class="badge bg-danger">
+            <span class="badge bg-danger fs-6">
                 {{ instrument.get_status_display }}
             </span>
 
         {% endif %}
-    </div>
 
-
-    <div>
-        <a href="{% url 'instrument_list' %}" 
-           class="btn btn-outline-secondary">
-            ← Back to Instruments
-        </a>
     </div>
 
 </div>
-
-
-<!-- Actions -->
-
-<div class="mb-4">
-
-    <a href="{% url 'instrument_edit' instrument.id %}"
-       class="btn btn-primary">
-        Edit
-    </a>
-
-
-    <a href="{% url 'instrument_connect' instrument.id %}" class="btn btn-success">
-        Connect
-    </a>
-
-
-    <a href="{% url 'instrument_identify' instrument.id %}" class="btn btn-info">
-        Identify
-    </a>
-
-
-    <a href="{% url 'instrument_measure' instrument.id %}" class="btn btn-warning">
-        Measure
-    </a>
-
-
-    <a href="{% url 'instrument_delete' instrument.id %}"
-       class="btn btn-danger">
-        Delete
-    </a>
-
-</div>
-
 
 
 <div class="row">
 
-
     <!-- General Information -->
+    <div class="col-lg-6">
 
-    <div class="col-md-6">
-
-        <div class="card mb-3">
+        <div class="card shadow-sm mb-4">
 
             <div class="card-header">
-                General Information
+                <strong>General Information</strong>
             </div>
-
 
             <div class="card-body">
 
-                <p>
-                    <strong>Name:</strong>
-                    {{ instrument.name }}
-                </p>
+                <table class="table table-borderless mb-0">
 
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ instrument.name }}</td>
+                    </tr>
 
-                <p>
-                    <strong>Category:</strong>
-                    {{ instrument.get_category_display }}
-                </p>
+                    <tr>
+                        <th>Manufacturer</th>
+                        <td>{{ instrument.manufacturer }}</td>
+                    </tr>
 
+                    <tr>
+                        <th>Model</th>
+                        <td>{{ instrument.model }}</td>
+                    </tr>
 
-                <p>
-                    <strong>Manufacturer:</strong>
-                    {{ instrument.manufacturer }}
-                </p>
+                    <tr>
+                        <th>Serial Number</th>
+                        <td>{{ instrument.serial_number|default:"-" }}</td>
+                    </tr>
 
+                    <tr>
+                        <th>Category</th>
+                        <td>{{ instrument.get_category_display }}</td>
+                    </tr>
 
-                <p>
-                    <strong>Model:</strong>
-                    {{ instrument.model }}
-                </p>
-
+                </table>
 
             </div>
 
         </div>
 
     </div>
-
-
 
     <!-- Connection -->
+    <div class="col-lg-6">
 
-    <div class="col-md-6">
-
-        <div class="card mb-3">
+        <div class="card shadow-sm mb-4">
 
             <div class="card-header">
-                Connection
+                <strong>Connection</strong>
             </div>
-
 
             <div class="card-body">
 
+                <table class="table table-borderless mb-0">
 
-                <p>
-                    <strong>Interface:</strong>
-                    {{ instrument.get_interface_display }}
-                </p>
+                    <tr>
+                        <th>Interface</th>
+                        <td>{{ instrument.get_interface_display }}</td>
+                    </tr>
 
+                    <tr>
+                        <th>Address</th>
+                        <td>{{ instrument.address|default:"-" }}</td>
+                    </tr>
 
-                <p>
-                    <strong>Address:</strong>
-                    {{ instrument.address }}
-                </p>
+                    <tr>
+                        <th>Location</th>
+                        <td>{{ instrument.location|default:"-" }}</td>
+                    </tr>
 
+                    <tr>
+                        <th>Status</th>
+                        <td>{{ instrument.get_status_display }}</td>
+                    </tr>
 
-                <p>
-                    <strong>Serial Number:</strong>
-                    {{ instrument.serial_number }}
-                </p>
-
-                <p>
-                    <strong>Identification:</strong>
-                    {{ instrument.last_identification }}
-                </p>
+                </table>
 
             </div>
 
         </div>
 
     </div>
-
 
 </div>
 
-<!-- Latest Measurements -->
+<!-- Description -->
 
-<div class="card mt-3">
+<div class="card shadow-sm mb-4">
 
     <div class="card-header">
-        Latest Measurements
+        <strong>Description</strong>
     </div>
-
 
     <div class="card-body">
 
+        {% if instrument.description %}
 
-        <table class="table table-sm table-striped">
+            {{ instrument.description|linebreaks }}
 
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Function</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
+        {% else %}
 
+            <span class="text-muted">
+                No description available.
+            </span>
 
-            <tbody>
+        {% endif %}
 
-            {% for m in measurements %}
+    </div>
 
-                <tr>
+</div>
 
-                    <td>
-                        {{ m.timestamp }}
-                    </td>
+<!-- Action Toolbar -->
 
+<div class="card shadow-sm">
 
-                    <td>
-                        {{ m.function }}
-                    </td>
+    <div class="card-header">
+        <strong>Actions</strong>
+    </div>
 
+    <div class="card-body">
 
-                    <td>
-                        {{ m.value }}
-                        {{ m.unit }}
-                    </td>
+        <div class="d-flex flex-wrap gap-2">
 
-                </tr>
+            <a href="{% url 'instrument_edit' instrument.id %}"
+               class="btn btn-warning">
+                ✏ Edit
+            </a>
 
+            <button class="btn btn-primary" disabled>
+                🔌 Connect
+            </button>
 
-            {% empty %}
+            <button class="btn btn-info text-white" disabled>
+                🆔 Identify
+            </button>
 
-                <tr>
-                    <td colspan="3"
-                        class="text-center text-muted">
+            <button class="btn btn-success" disabled>
+                📈 Measure
+            </button>
 
-                        No measurements found
+            <a href="{% url 'instrument_delete' instrument.id %}"
+               class="btn btn-danger">
+                🗑 Delete
+            </a>
 
-                    </td>
-                </tr>
-
-            {% endfor %}
-
-            </tbody>
-
-
-        </table>
-
+        </div>
 
     </div>
 

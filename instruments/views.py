@@ -2,18 +2,49 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 
 # Create your views here.
-from .models import Instrument, InstrumentStatus
+from .models import Instrument, InstrumentStatus, InstrumentCategory
 from .forms import InstrumentForm
 from drivers.manager import DriverManager
 from measurements.models import Measurement
 from django.utils import timezone
+from django.db.models import Q
 
 def instrument_list(request):
+
+    search = request.GET.get("search", "")
+
     instruments = Instrument.objects.all()
 
-    return render(request, "instruments/list.html", {
-        "instruments": instruments
-    })
+    category = request.GET.get("category", "")
+
+    status = request.GET.get("status", "")
+
+    if search:
+        instruments = instruments.filter(
+            Q(name__icontains=search) |
+            Q(manufacturer__icontains=search) |
+            Q(model__icontains=search) |
+            Q(serial_number__icontains=search) |
+            Q(address__icontains=search)
+        )
+
+    if category:
+        instruments = instruments.filter(category=category)
+
+    if status:
+        instruments = instruments.filter(status=status)
+
+    context = {
+        "instruments": instruments,
+        "instrument_count": instruments.count(),
+        "search": search,
+        "category": category,
+        "categories": InstrumentCategory.choices,
+        "status": status,
+        "statuses": InstrumentStatus.choices,
+    }
+
+    return render(request, "instruments/list.html", context)
 
 def instrument_detail(request, pk):
 
