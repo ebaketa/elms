@@ -133,6 +133,16 @@
                         <td>{{ instrument.get_status_display }}</td>
                     </tr>
 
+                    <tr>
+                        <th>Last Connected</th>
+                        <td>{{ instrument.last_connected|default:"-" }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Identification</th>
+                        <td>{{ instrument.last_identification|default:"-" }}</td>
+                    </tr>
+
                 </table>
 
             </div>
@@ -182,24 +192,26 @@
         <div class="d-flex flex-wrap gap-2">
 
             <a href="{% url 'instrument_edit' instrument.id %}"
-               class="btn btn-warning">
+            class="btn btn-warning">
                 ✏ Edit
             </a>
 
-            <button class="btn btn-primary" disabled>
+            <a href="{% url 'instrument_connect' instrument.id %}"
+            class="btn btn-primary">
                 🔌 Connect
-            </button>
+            </a>
 
-            <button class="btn btn-info text-white" disabled>
+            <a href="{% url 'instrument_identify' instrument.id %}"
+            class="btn btn-info text-white">
                 🆔 Identify
-            </button>
+            </a>
 
             <button class="btn btn-success" disabled>
                 📈 Measure
             </button>
 
             <a href="{% url 'instrument_delete' instrument.id %}"
-               class="btn btn-danger">
+            class="btn btn-danger">
                 🗑 Delete
             </a>
 

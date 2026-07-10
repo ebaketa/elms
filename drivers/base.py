@@ -1,31 +1,40 @@
+"""
+Base driver for all ELMS instruments.
+"""
+
 from abc import ABC, abstractmethod
+from typing import Any
 
 
-class InstrumentDriver(ABC):
+class BaseInstrumentDriver(ABC):
     """
-    Base class for all instrument drivers.
+    Abstract base class for all instrument drivers.
     """
 
-    def __init__(self, instrument):
+    def __init__(self, instrument: Any):
         self.instrument = instrument
         self.connected = False
 
     @abstractmethod
-    def connect(self):
-        """Connect to instrument."""
-        pass
+    def connect(self) -> bool:
+        """Connect to the instrument."""
+        raise NotImplementedError
 
     @abstractmethod
-    def disconnect(self):
-        """Disconnect from instrument."""
-        pass
+    def disconnect(self) -> None:
+        """Disconnect from the instrument."""
+        raise NotImplementedError
 
     @abstractmethod
-    def identify(self):
-        """Return instrument identification string."""
-        pass
+    def identify(self) -> str:
+        """Return *IDN? response."""
+        raise NotImplementedError
 
     @abstractmethod
-    def measure(self):
-        """Perform measurement."""
-        pass
+    def measure(self, parameter: str | None = None):
+        """Perform one measurement."""
+        raise NotImplementedError
+
+    def is_connected(self) -> bool:
+        """Return current connection state."""
+        return self.connected

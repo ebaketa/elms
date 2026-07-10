@@ -51,4 +51,9 @@ urlpatterns = [
         name="instrument_measure"
     ),
 
+    path(
+        "<int:pk>/connect/",
+        views.instrument_connect,
+        name="instrument_connect",
+    ),
 ]

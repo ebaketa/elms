@@ -90,21 +90,32 @@ class Instrument(models.Model):
         auto_now=True,
     )
 
+    driver = models.CharField(
+        max_length=50,
+        default="mock",
+        help_text="Registered driver name",
+    )
+
+    connection_timeout = models.PositiveIntegerField(
+        default=5,
+        help_text="Connection timeout in seconds",
+    )
+
 class Meta:
     ordering = ["manufacturer", "model"]
     verbose_name = "Instrument"
     verbose_name_plural = "Instruments"
 
 
-def __str__(self):
-    return f"{self.manufacturer} {self.model}"
+    def __str__(self):
+        return f"{self.manufacturer} {self.model}"
 
 
-@property
-def status_badge(self):
-    return {
-        "online": "success",
-        "offline": "secondary",
-        "busy": "warning",
-        "error": "danger",
-    }.get(self.status, "secondary")
+    @property
+    def status_badge(self):
+        return {
+            "online": "success",
+            "offline": "secondary",
+            "busy": "warning",
+            "error": "danger",
+        }.get(self.status, "secondary")

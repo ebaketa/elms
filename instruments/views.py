@@ -8,6 +8,34 @@ from drivers.manager import DriverManager
 from measurements.models import Measurement
 from django.utils import timezone
 from django.db.models import Q
+from services.connection_service import ConnectionService
+from django.contrib import messages
+from django.shortcuts import redirect
+from services.instrument_service import InstrumentService
+
+def instrument_connect(request, pk):
+
+    instrument = get_object_or_404(Instrument, pk=pk)
+
+    try:
+        ConnectionService.connect(instrument)
+
+        instrument.status = "online"
+        instrument.save(update_fields=["status"])
+
+        messages.success(
+            request,
+            f"{instrument.name} connected successfully."
+        )
+
+    except Exception as ex:
+
+        instrument.status = "error"
+        instrument.save(update_fields=["status"])
+
+        messages.error(request, str(ex))
+
+    return redirect("instrument_detail", pk=pk)
 
 def instrument_list(request):
 
@@ -212,3 +240,40 @@ def instrument_measure(request, pk):
         "instrument_detail",
         pk=instrument.pk
     )
+
+def instrument_identify(request, pk):
+
+    instrument = get_object_or_404(Instrument, pk=pk)
+
+    try:
+        identity = ConnectionService.identify(instrument)
+
+        messages.success(
+            request,
+            f"Instrument identified: {identity}"
+        )
+
+    except Exception as ex:
+
+        messages.error(request, str(ex))
+
+    return redirect("instrument_detail", pk=pk)
+
+def instrument_identify(request, pk):
+
+    instrument = get_object_or_404(Instrument, pk=pk)
+
+    try:
+
+        identity = InstrumentService.identify(instrument)
+
+        messages.success(
+            request,
+            f"Identification successful: {identity}"
+        )
+
+    except Exception as ex:
+
+        messages.error(request, str(ex))
+
+    return redirect("instrument_detail", pk=pk)
