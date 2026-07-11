@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}
+Instrument Console
+{% endblock %}
+
+{% block content %}
+
+<h2>{{ instrument.name }} Console</h2>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <div class="input-group mb-3">
+
+        <input
+            name="command"
+            class="form-control"
+            placeholder="*IDN?">
+
+        <button class="btn btn-primary">
+            Send
+        </button>
+
+    </div>
+
+</form>
+
+{% if response %}
+
+<div class="card">
+
+    <div class="card-header">
+        Response
+    </div>
+
+    <div class="card-body">
+
+        <pre>{{ response }}</pre>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

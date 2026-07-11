@@ -1,36 +1,28 @@
-from django.shortcuts import (
-    render,
-    get_object_or_404,
-    redirect,
-)
-
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 
-from django.db.models import Q
-
-from .models import (
-    Instrument,
-    InstrumentStatus,
-    InstrumentCategory,
-)
-
+# Create your views here.
+from .models import Instrument, InstrumentStatus, InstrumentCategory
 from .forms import InstrumentForm
-
+from drivers.manager import DriverManager
 from measurements.models import Measurement
-
+from django.utils import timezone
+from django.db.models import Q
+from services.connection_service import ConnectionService
+from django.contrib import messages
+from django.shortcuts import redirect
 from services.instrument_service import InstrumentService
 from services.measurement_service import MeasurementService
 
 def instrument_connect(request, pk):
 
-    instrument = get_object_or_404(
-        Instrument,
-        pk=pk,
-    )
+    instrument = get_object_or_404(Instrument, pk=pk)
 
     try:
+        ConnectionService.connect(instrument)
 
-        InstrumentService.connect(instrument)
+        instrument.status = "online"
+        instrument.save(update_fields=["status"])
 
         messages.success(
             request,
@@ -39,15 +31,12 @@ def instrument_connect(request, pk):
 
     except Exception as ex:
 
-        messages.error(
-            request,
-            str(ex),
-        )
+        instrument.status = "error"
+        instrument.save(update_fields=["status"])
 
-    return redirect(
-        "instrument_detail",
-        pk=pk,
-    )
+        messages.error(request, str(ex))
+
+    return redirect("instrument_detail", pk=pk)
 
 def instrument_list(request):
 
@@ -156,42 +145,155 @@ def instrument_delete(request, pk):
         "instrument": instrument
     })
 
-def instrument_identify(request, pk):
+def instrument_connect(request, pk):
 
     instrument = get_object_or_404(
         Instrument,
-        pk=pk,
+        pk=pk
     )
 
-    try:
+    driver = DriverManager.get_driver(instrument)
 
-        identity = InstrumentService.identify(
-            instrument
-        )
+    try:
+        driver.connect()
+
+        instrument.status = InstrumentStatus.ONLINE
+        instrument.last_connected = timezone.now()
+        instrument.save()
 
         messages.success(
             request,
-            identity,
+            f"{instrument.name} connected"
         )
 
-    except Exception as ex:
+    except Exception as e:
+
+        instrument.status = InstrumentStatus.ERROR
+        instrument.save()
 
         messages.error(
             request,
-            str(ex),
+            f"Connection failed: {e}"
         )
 
     return redirect(
         "instrument_detail",
-        pk=pk,
+        pk=instrument.pk
+    )
+
+def instrument_identify(request, pk):
+
+    instrument = get_object_or_404(
+        Instrument,
+        pk=pk
+    )
+
+    driver = DriverManager.get_driver(instrument)
+
+    try:
+
+        driver.connect()
+
+        identification = driver.identify()
+
+        instrument.last_identification = identification
+        instrument.save()
+
+        messages.info(
+            request,
+            identification
+        )
+
+    except Exception as e:
+
+        messages.error(
+            request,
+            f"Identify failed: {e}"
+        )
+
+    return redirect(
+        "instrument_detail",
+        pk=instrument.pk
     )
 
 def instrument_measure(request, pk):
 
     instrument = get_object_or_404(
         Instrument,
-        pk=pk,
+        pk=pk
     )
+
+    driver = DriverManager.get_driver(instrument)
+
+    try:
+        driver.connect()
+
+        result = driver.measure()
+
+        Measurement.objects.create(
+            instrument=instrument,
+            function=result["function"],
+            value=result["value"],
+            unit=result["unit"],
+        )
+
+        messages.success(
+            request,
+            f'Measurement: {result["value"]} {result["unit"]}'
+        )
+
+    except Exception as e:
+
+        messages.error(
+            request,
+            f"Measurement failed: {e}"
+        )
+
+    return redirect(
+        "instrument_detail",
+        pk=instrument.pk
+    )
+
+def instrument_identify(request, pk):
+
+    instrument = get_object_or_404(Instrument, pk=pk)
+
+    try:
+        identity = ConnectionService.identify(instrument)
+
+        messages.success(
+            request,
+            f"Instrument identified: {identity}"
+        )
+
+    except Exception as ex:
+
+        messages.error(request, str(ex))
+
+    return redirect("instrument_detail", pk=pk)
+
+def instrument_identify(request, pk):
+
+    instrument = get_object_or_404(Instrument, pk=pk)
+
+    try:
+
+        identity = InstrumentService.identify(instrument)
+
+        messages.success(
+            request,
+            f"Identification successful: {identity}"
+        )
+
+    except Exception as ex:
+
+        messages.error(request, str(ex))
+
+    return redirect("instrument_detail", pk=pk)
+
+def instrument_measure(request, pk):
+
+    instrument = get_object_or_404(Instrument, pk=pk)
 
     try:
 
@@ -202,15 +304,12 @@ def instrument_measure(request, pk):
 
         messages.success(
             request,
-            f"{measurement.value} {measurement.unit}",
+            f"Measured {measurement.value} {measurement.unit}"
         )
 
     except Exception as ex:
 
-        messages.error(
-            request,
-            str(ex),
-        )
+        messages.error(request, str(ex))
 
     return redirect(
         "instrument_detail",

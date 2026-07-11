@@ -4,26 +4,25 @@
 Measurements
 {% endblock %}
 
-
 {% block content %}
 
 <h2 class="mb-4">
     Measurements
 </h2>
 
-
-<table class="table table-striped">
+<table class="table table-striped table-hover align-middle">
 
 <thead>
+
 <tr>
     <th>Instrument</th>
-    <th>Time</th>
-    <th>Function</th>
-    <th>Value</th>
+    <th>Timestamp</th>
+    <th>Parameter</th>
+    <th class="text-end">Value</th>
     <th>Unit</th>
 </tr>
-</thead>
 
+</thead>
 
 <tbody>
 
@@ -31,34 +30,28 @@ Measurements
 
 <tr>
 
-<td>
-    {{ m.instrument.name }}
-</td>
+    <td>{{ m.instrument.name }}</td>
 
-<td>
-    {{ m.timestamp }}
-</td>
+    <td>{{ m.timestamp }}</td>
 
-<td>
-    {{ m.function }}
-</td>
+    <td>{{ m.parameter }}</td>
 
-<td>
-    {{ m.value }}
-</td>
+    <td class="text-end">
+        {{ m.value }}
+    </td>
 
-<td>
-    {{ m.unit }}
-</td>
+    <td>{{ m.unit }}</td>
 
 </tr>
 
 {% empty %}
 
 <tr>
-<td colspan="5" class="text-center text-muted">
-No measurements
-</td>
+
+    <td colspan="5" class="text-center text-muted">
+        No measurements available.
+    </td>
+
 </tr>
 
 {% endfor %}
@@ -66,6 +59,5 @@ No measurements
 </tbody>
 
 </table>
-
 
 {% endblock %}

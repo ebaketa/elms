@@ -40,3 +40,22 @@ class ConnectionManager:
     @classmethod
     def is_connected(cls, instrument):
         return instrument.id in cls._connections
+
+    @classmethod
+    def disconnect_all(cls):
+        """
+        Disconnect all active instruments.
+        """
+
+        for driver in cls._connections.values():
+            driver.disconnect()
+
+        cls._connections.clear()
+
+    @classmethod
+    def clear(cls):
+        """
+        Clear cached connections.
+        """
+
+        cls._connections.clear()

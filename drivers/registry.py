@@ -1,11 +1,6 @@
-from .mock import MockDriver
-
-
 class DriverRegistry:
 
-    _drivers = {
-        "mock": MockDriver,
-    }
+    _drivers = {}
 
     @classmethod
     def register(cls, name, driver_class):
@@ -17,6 +12,7 @@ class DriverRegistry:
 
     @classmethod
     def create(cls, instrument):
+
         driver_class = cls.get(instrument.driver)
 
         if driver_class is None:

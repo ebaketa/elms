@@ -38,3 +38,17 @@ class BaseInstrumentDriver(ABC):
     def is_connected(self) -> bool:
         """Return current connection state."""
         return self.connected
+
+    @abstractmethod
+    def send_command(self, command: str) -> None:
+        """
+        Send a SCPI command.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def read_response(self):
+        """
+        Read instrument response.
+        """
+        raise NotImplementedError

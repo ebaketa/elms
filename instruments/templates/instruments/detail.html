@@ -51,6 +51,86 @@
 
 </div>
 
+<!-- Instrument Dashboard -->
+
+<div class="row mb-4">
+
+    <div class="col-md-3">
+
+        <div class="card text-center shadow-sm">
+
+            <div class="card-body">
+
+                <h6>Status</h6>
+
+                <span class="badge bg-{{ instrument.status_badge }} fs-6">
+                    {{ instrument.get_status_display }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card text-center shadow-sm">
+
+            <div class="card-body">
+
+                <h6>Driver</h6>
+
+                <strong>{{ instrument.driver }}</strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card text-center shadow-sm">
+
+            <div class="card-body">
+
+                <h6>Last Measurement</h6>
+
+                {% if last_measurement %}
+                    <strong>
+                        {{ last_measurement.value|floatformat:5 }}
+                        {{ last_measurement.unit }}
+                    </strong>
+                {% else %}
+                    -
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card text-center shadow-sm">
+
+            <div class="card-body">
+
+                <h6>Measurements</h6>
+
+                <strong>
+                    {{ recent_measurements|length }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 <div class="row">
 
@@ -206,9 +286,10 @@
                 🆔 Identify
             </a>
 
-            <button class="btn btn-success" disabled>
+            <a href="{% url 'instrument_measure' instrument.id %}"
+            class="btn btn-success">
                 📈 Measure
-            </button>
+            </a>
 
             <a href="{% url 'instrument_delete' instrument.id %}"
             class="btn btn-danger">
@@ -221,4 +302,81 @@
 
 </div>
 
+<div class="card shadow-sm mt-4">
+
+    <div class="card-header">
+        <strong>Recent Measurements</strong>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-hover">
+
+            <thead>
+
+            <tr>
+
+                <th>Timestamp</th>
+
+                <th>Parameter</th>
+
+                <th class="text-end">
+                    Value
+                </th>
+
+                <th>
+                    Unit
+                </th>
+
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for m in recent_measurements %}
+
+            <tr>
+
+                <td>{{ m.timestamp }}</td>
+
+                <td>{{ m.parameter }}</td>
+
+                <td class="text-end">
+
+                    {{ m.value }}
+
+                </td>
+
+                <td>
+
+                    {{ m.unit }}
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="4"
+                    class="text-center text-muted">
+
+                    No measurements available.
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+    
 {% endblock %}

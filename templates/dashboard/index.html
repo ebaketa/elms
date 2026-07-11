@@ -18,25 +18,9 @@ Dashboard
 
             <div class="card-body">
 
-                <h5>Connected Instruments</h5>
+                <h5>🔬 Instruments</h5>
 
-                <h2>0</h2>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-lg-3">
-
-        <div class="card">
-
-            <div class="card-body">
-
-                <h5>Measurements</h5>
-
-                <h2>0</h2>
+                <h2>{{ instrument_count }}</h2>
 
             </div>
 
@@ -50,9 +34,9 @@ Dashboard
 
             <div class="card-body">
 
-                <h5>Projects</h5>
+                <h5>📈 Measurements</h5>
 
-                <h2>0</h2>
+                <h2>{{ measurement_count }}</h2>
 
             </div>
 
@@ -66,13 +50,79 @@ Dashboard
 
             <div class="card-body">
 
-                <h5>Alerts</h5>
+                <h5>📁 Projects</h5>
 
-                <h2>0</h2>
+                <h2>{{ project_count }}</h2>
 
             </div>
 
         </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <h5>🟢 Online</h5>
+
+                <h2>{{ online_count }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card shadow-sm mt-4">
+
+    <div class="card-header">
+
+        <strong>System Information</strong>
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-borderless mb-0">
+
+            <tr>
+
+                <th>Application</th>
+
+                <td>Electronic Laboratory Management System</td>
+
+            </tr>
+
+            <tr>
+
+                <th>Version</th>
+
+                <td>0.3 Development</td>
+
+            </tr>
+
+            <tr>
+
+                <th>Framework</th>
+
+                <td>Django 5.2</td>
+
+            </tr>
+
+            <tr>
+
+                <th>Database</th>
+
+                <td>SQLite</td>
+
+            </tr>
+
+        </table>
 
     </div>
 
