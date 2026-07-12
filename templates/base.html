@@ -14,8 +14,7 @@
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        <!-- <link rel="stylesheet" href="{% static 'css/elms.css' %}"> -->
-
+        <link rel="stylesheet" href="{% static 'css/elms.css' %}">
     </head>
 
     <body class="bg-light">
@@ -34,7 +33,7 @@
 
                                 <a class="text-white text-decoration-none" href="{% url 'dashboard' %}">
 
-                                    Electronic Laboratory Management System
+                                    Electronics Laboratory Management System
 
                                 </a>
 
@@ -67,23 +66,23 @@
                     <ul class="navbar-nav">
 
                         <li class="nav-item">
-                            <a class="nav-link px-3" href="{% url 'dashboard' %}">Dashboard</a>
+                            <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link px-3" href="{% url 'instrument_list' %}">Instruments</a>
+                            <a class="nav-link" href="{% url 'instrument_list' %}">Instruments</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link px-3" href="{% url 'measurement_list' %}">Measurements</a>
+                            <a class="nav-link" href="{% url 'measurement_list' %}">Measurements</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link px-3" href="#">Projects</a>
+                            <a class="nav-link" href="#">Projects</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link px-3" href="#">Users</a>
+                            <a class="nav-link" href="#">Users</a>
                         </li>
 
                     </ul>
@@ -97,27 +96,27 @@
                     <aside class="col-md-3 col-lg-2">
                         <ul class="list-group shadow-sm sticky-top">
                             <li class="list-group-item">
-                                <a class="nav-link px-3" href="{% url 'dashboard' %}">
+                                <a href="{% url 'dashboard' %}">
                                     Dashboard
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a class="nav-link px-3" href="{% url 'instrument_list' %}">
+                                <a href="{% url 'instrument_list' %}">
                                     Instruments
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a class="nav-link px-3" href="{% url 'measurement_list' %}">
+                                <a href="{% url 'measurement_list' %}">
                                     Measurements
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a class="nav-link px-3" href="#">
+                                <a href="#">
                                     Projects
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a class="nav-link px-3" href="#">
+                                <a href="#">
                                     Users
                                 </a>
                             </li>
@@ -149,13 +148,13 @@
                 </div>
             </div>
 
-            <footer class="card-footer bg-dark text-white mt-4">
+            <footer class="card-footer bg-primary text-white mt-4">
 
                 <div class="text-center py-3">
 
                     <small>
                         <strong>ELMS v0.3</strong><br>
-                        Electronic Laboratory Management System<br>
+                        Electronics Laboratory Management System<br>
                         &copy; 2026 ebaketa/ebaketa49
                     </small>
 
