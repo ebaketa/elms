@@ -7,7 +7,7 @@ High-level operations on laboratory instruments.
 from django.utils import timezone
 
 from services.connection_manager import ConnectionManager
-
+from drivers.registry import DriverRegistry
 
 class InstrumentService:
 
@@ -35,16 +35,21 @@ class InstrumentService:
         Identify an instrument and store the result.
         """
 
-        driver = ConnectionManager.connect(instrument)
+        driver = DriverRegistry.create(instrument)
+        driver.connect()
 
-        identity = driver.identify()
+        try:
+            identity = driver.identify()
 
-        instrument.last_identification = identity
-        instrument.last_connected = timezone.now()
+            instrument.last_identification = identity
+            instrument.last_connected = timezone.now()
 
-        instrument.save(update_fields=[
-            "last_identification",
-            "last_connected",
-        ])
+            instrument.save(update_fields=[
+                "last_identification",
+                "last_connected",
+            ])
 
-        return identity
+            return identity
+
+        finally:
+            driver.disconnect()

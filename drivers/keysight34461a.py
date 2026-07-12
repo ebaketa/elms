@@ -87,35 +87,28 @@ class Keysight34461ADriver(BaseInstrumentDriver):
             .strip()
         )
 
-    def identify(self):
-        """
-        Read *IDN? string.
-        """
+    def query(self, command, delay=0.5):
 
-        self.send_command("*IDN?\n")
+        self.send_command(command)
 
-        time.sleep(0.5)
+        time.sleep(delay)
 
         return self.read_response()
 
     def measure(self, parameter="voltage"):
-        """
-        Read one measurement.
-        """
 
         if parameter != "voltage":
             raise ValueError(
                 f"Unsupported parameter: {parameter}"
             )
 
-        self.send_command("READ?\n")
-
-        #
-        # 100 PLC measurement
-        #
-
-        time.sleep(5)
-
-        return float(
-            self.read_response()
+        response = self.query(
+            "READ?\n",
+            delay=5,
         )
+
+        return float(response)  
+
+    def identify(self):
+
+        return self.query("*IDN?\n")

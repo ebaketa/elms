@@ -1,39 +1,31 @@
-body{
-    font-size:.95rem;
+body {
+    font-size: 0.95rem;
 }
 
-nav{
-    min-height:100vh;
+.card {
+    border: none;
+    border-radius: 12px;
 }
 
-.card{
-    border:none;
-    border-radius:12px;
+.table {
+    vertical-align: middle;
 }
 
-.card-header{
-    font-weight:600;
+.list-group-item {
+    border: none;
+    border-radius: 8px !important;
+    margin-bottom: 4px;
 }
 
-.table{
-    vertical-align:middle;
+.list-group-item:hover {
+    background: #0d6efd !important;
 }
 
-.list-group-item{
-    border:none;
-    border-radius:8px !important;
-    margin-bottom:4px;
+.list-group-item.active {
+    background: #0d6efd !important;
+    border-color: #0d6efd !important;
 }
 
-.list-group-item:hover{
-    background:#0d6efd !important;
-}
-
-.list-group-item.active{
-    background:#0d6efd !important;
-    border-color:#0d6efd !important;
-}
-
-header{
-    background:white;
+header {
+    background: white;
 }

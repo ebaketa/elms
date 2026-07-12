@@ -13,6 +13,9 @@ class DriverRegistry:
     @classmethod
     def create(cls, instrument):
 
+        print("Driver:", repr(instrument.driver))
+        print("Available:", cls._drivers.keys())
+
         driver_class = cls.get(instrument.driver)
 
         if driver_class is None:

@@ -19,4 +19,5 @@ urlpatterns = [
 
     path("<int:pk>/measure/", views.instrument_measure, name="instrument_measure"),
 
+    path("<int:pk>/console/", views.instrument_console, name="instrument_console"),
 ]

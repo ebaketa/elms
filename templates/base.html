@@ -2,118 +2,56 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            {% block title %}
+                ELMS
+            {% endblock %}
+        </title>
 
-    <title>
-        {% block title %}ELMS{% endblock %}
-    </title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+        <!-- <link rel="stylesheet" href="{% static 'css/elms.css' %}"> -->
 
-    <link rel="stylesheet"
-          href="{% static 'css/elms.css' %}">
+    </head>
 
-</head>
+    <body class="bg-light">
 
-<body class="bg-light">
+        <div class="card shadow-sm mx-2 my-2">
 
-<div class="container-fluid">
+            <header class="card-header bg-primary text-white">
 
-    <div class="row min-vh-100">
+                <div class="container-fluid py-3">
 
-        <!-- Sidebar -->
+                    <div class="d-flex justify-content-between align-items-center">
 
-        <nav class="col-md-2 bg-dark text-white p-3">
+                        <div>
 
-            <h2 class="fw-bold">
+                            <h1 class="h3 mb-0">
 
-            🔬 ELMS
+                                <a class="text-white text-decoration-none" href="{% url 'dashboard' %}">
 
-            </h2>
+                                    Electronic Laboratory Management System
 
-            <p class="text-secondary">
+                                </a>
 
-            Electronic Laboratory Management System
+                            </h1>
 
-            </p>
+                            <div class="small opacity-75">
 
-            <div class="list-group list-group-flush">
+                                ELMS Development Version
 
-                <a href="{% url 'dashboard' %}"
-                   class="list-group-item list-group-item-action bg-dark text-white">
-                    🏠 Dashboard
-                </a>
+                            </div>
 
-                <a href="{% url 'instrument_list' %}"
-                   class="list-group-item list-group-item-action bg-dark text-white">
-                    🔬 Instruments
-                </a>
+                        </div>
 
-                <a href="{% url 'measurement_list' %}"
-                   class="list-group-item list-group-item-action bg-dark text-white">
-                    📈 Measurements
-                </a>
+                        <span class="badge bg-light text-dark fs-6">
 
-                <a href="#"
-                   class="list-group-item list-group-item-action bg-dark text-white">
-                    📁 Projects
-                </a>
-
-                <a href="#"
-                   class="list-group-item list-group-item-action bg-dark text-white">
-                    👤 Users
-                </a>
-
-            </div>
-
-            <div class="mt-auto pt-5">
-
-                <hr>
-
-                <small class="text-secondary">
-
-                    ELMS v0.3
-
-                    <br>
-
-                    © 2026
-
-                </small>
-
-            </div>
-
-        </nav>
-
-        <!-- Main -->
-
-        <main class="col-md-10 p-0">
-
-            <!-- Top Bar -->
-
-            <header class="bg-white border-bottom shadow-sm px-4 py-3">
-
-                <div class="d-flex justify-content-between align-items-center">
-
-                    <div>
-
-                        <h4 class="mb-0">
-                            Electronic Laboratory Management System
-                        </h4>
-
-                        <small class="text-muted">
-                            ELMS Development Version
-                        </small>
-
-                    </div>
-
-                    <div>
-
-                        <span class="badge bg-success">
                             Development
+
                         </span>
 
                     </div>
@@ -122,36 +60,113 @@
 
             </header>
 
-            <!-- Page Content -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-            <div class="container-fluid p-4">
+                <div class="container-fluid">
 
-                {% if messages %}
+                    <ul class="navbar-nav">
 
-                    {% for message in messages %}
+                        <li class="nav-item">
+                            <a class="nav-link px-3" href="{% url 'dashboard' %}">Dashboard</a>
+                        </li>
 
-                        <div class="alert alert-{{ message.tags }}">
+                        <li class="nav-item">
+                            <a class="nav-link px-3" href="{% url 'instrument_list' %}">Instruments</a>
+                        </li>
 
-                            {{ message }}
+                        <li class="nav-item">
+                            <a class="nav-link px-3" href="{% url 'measurement_list' %}">Measurements</a>
+                        </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link px-3" href="#">Projects</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3" href="#">Users</a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </nav>
+
+            <div class="container-fluid mt-3">
+                <div class="row">
+                    <aside class="col-md-3 col-lg-2">
+                        <ul class="list-group shadow-sm sticky-top">
+                            <li class="list-group-item">
+                                <a class="nav-link px-3" href="{% url 'dashboard' %}">
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a class="nav-link px-3" href="{% url 'instrument_list' %}">
+                                    Instruments
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a class="nav-link px-3" href="{% url 'measurement_list' %}">
+                                    Measurements
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a class="nav-link px-3" href="#">
+                                    Projects
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a class="nav-link px-3" href="#">
+                                    Users
+                                </a>
+                            </li>
+                        </ul>
+                    </aside>
+
+                    <main class="col-md-9 col-lg-10">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                {% if messages %}
+
+                                    {% for message in messages %}
+
+                                        <div class="alert alert-{{ message.tags }}">
+
+                                            {{ message }}
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                {% endif %}
+
+                                {% block content %}
+                                {% endblock %}
+                            </div>
                         </div>
-
-                    {% endfor %}
-
-                {% endif %}
-
-                {% block content %}
-                {% endblock %}
-
+                    </main>
+                </div>
             </div>
 
-        </main>
+            <footer class="card-footer bg-dark text-white mt-4">
 
-    </div>
+                <div class="text-center py-3">
 
-</div>
+                    <small>
+                        <strong>ELMS v0.3</strong><br>
+                        Electronic Laboratory Management System<br>
+                        &copy; 2026 ebaketa/ebaketa49
+                    </small>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+                </div>
 
-</body>
+            </footer>
+
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+    </body>
+
 </html>

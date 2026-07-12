@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}
+SCPI Console
+{% endblock %}
+
+{% block content %}
+
+<h2>
+    {{ instrument.name }}
+</h2>
+
+<div class="card shadow-sm">
+
+    <div class="card-header">
+
+        SCPI Console
+
+    </div>
+
+    <div class="card-body">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Command
+
+                </label>
+
+                <input
+                    type="text"
+                    name="command"
+                    class="form-control"
+                    placeholder="*IDN?">
+
+            </div>
+
+            <button class="btn btn-primary">
+
+                Send
+
+            </button>
+
+        </form>
+
+        <hr>
+
+        <h6>
+
+            Response
+
+        </h6>
+
+        <pre>
+
+{{ response }}
+
+        </pre>
+
+    </div>
+
+</div>
+
+{% endblock %}

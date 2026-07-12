@@ -216,3 +216,42 @@ def instrument_measure(request, pk):
         "instrument_detail",
         pk=pk,
     )
+
+def instrument_console(request, pk):
+
+    instrument = get_object_or_404(
+        Instrument,
+        pk=pk,
+    )
+
+    response = ""
+
+    if request.method == "POST":
+
+        command = request.POST.get(
+            "command",
+            "",
+        )
+
+        try:
+
+            driver = InstrumentService.connect(
+                instrument
+            )
+
+            response = driver.query(
+                command + "\n"
+            )
+
+        except Exception as ex:
+
+            response = str(ex)
+
+    return render(
+        request,
+        "instruments/console.html",
+        {
+            "instrument": instrument,
+            "response": response,
+        },
+    )

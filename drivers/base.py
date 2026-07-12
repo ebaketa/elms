@@ -52,3 +52,10 @@ class BaseInstrumentDriver(ABC):
         Read instrument response.
         """
         raise NotImplementedError
+
+    @abstractmethod
+    def query(self, command: str) -> str:
+        """
+        Send a SCPI query and return the response.
+        """
+        raise NotImplementedError
